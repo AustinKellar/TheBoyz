@@ -55,7 +55,7 @@ function updateInGameScore() {
 	else levelTimer.text = 'Time: ' + min + ':0' + sec;
 
 	inGameScore = damage + enemiesKilled;
-	inGameScoreText.text = 'Score: ' + inGameScore;
+	inGameScoreText.text = 'Score: ' + inGameScore * -1;
 }
 
 //create upgrades array
@@ -125,17 +125,26 @@ Score.prototype = {
 		if(finalShown) {
 			slideFinalText(finalScoreText);
 			if(game.time.now > finalShownTime + 1000) {
-				if(scoreCounter < totalScore) {
-				if(currentLevel === 'Play') scoreCounter += 100;
-				else scoreCounter += 1000;
-				frameCounter++;
-				if(frameCounter % 3 == 0) pointAud.play();
+				if(scoreCounter >= totalScore * -1) {
+					if(currentLevel === 'Play') {
+						scoreCounter -= 100;
+					} else {
+						scoreCounter -= 1000;
+					}
 
-				if(scoreCounter > totalScore) scoreCounter = totalScore
+					frameCounter++;
 
-				finalScoreText.text = 'Final Score: ' + scoreCounter;
+					if(frameCounter % 3 == 0) {
+						pointAud.play();
+					}
+
+					if(scoreCounter <= totalScore * -1) {
+						scoreCounter = totalScore * -1; 
+					}
+					
+					finalScoreText.text = 'Final Score: ' + scoreCounter;
 				}
-				if(scoreCounter == totalScore) {
+				if(scoreCounter == totalScore * -1) {
 					shake();
 				}
 			}	
@@ -205,7 +214,7 @@ function showTime() {
 }
 
 function showInGameScore() {
-	var title = game.add.text(room_width/2, 200, 'Level Score: ' + inGameScore, {font: '55px Aldrich', fill: '#ffffff'});
+	var title = game.add.text(room_width/2, 200, 'Level Score: ' + inGameScore * -1, {font: '55px Aldrich', fill: '#ffffff'});
 	title.anchor.set(0.5);;
 	bonus1Aud.play();
 	var tween = game.add.tween(title.scale).to( { x: 1.3, y: 1.3 }, 200, Phaser.Easing.Linear.None, true);
@@ -215,7 +224,7 @@ function showInGameScore() {
 function showAccuracyBonus() {
 	if(currentLevel != 'Play') accuracyBonus = accuracy * 500;
 	else accuracyBonus = accuracy * 100;
-	var title = game.add.text(room_width/2, 300, 'Accuracy Bonus: ' + accuracyBonus, {font: '55px Aldrich', fill: '#ffffff'});
+	var title = game.add.text(room_width/2, 300, 'Accuracy Bonus: ' + accuracyBonus * -1, {font: '55px Aldrich', fill: '#ffffff'});
 	title.anchor.set(0.5);;
 	var tween = game.add.tween(title.scale).to( { x: 1.3, y: 1.3 }, 200, Phaser.Easing.Linear.None, true);
 	tween.yoyo(true, 0);
@@ -252,7 +261,7 @@ function showTimeBonus() {
 		else if(totalSec <= 360) timeBonus = 5000;
 		else timeBonus = 0;
 	}
-	var title = game.add.text(room_width/2, 400, 'Speed Bonus: ' + timeBonus, {font: '55px Aldrich', fill: '#ffffff'});
+	var title = game.add.text(room_width/2, 400, 'Speed Bonus: ' + timeBonus * -1, {font: '55px Aldrich', fill: '#ffffff'});
 	title.anchor.set(0.5);;
 	bonus3Aud.play();
 	var tween = game.add.tween(title.scale).to( { x: 1.3, y: 1.3 }, 200, Phaser.Easing.Linear.None, true);
